@@ -1,0 +1,27 @@
+{
+  "name": "brbower",
+  "version":"0.1.0",
+  "description": "a browserify plugin, to enable you use bower components just like node modules",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tminglei/brbower"
+  },
+  "keywords": [
+    "bower",
+    "component",
+    "components",
+    "browserify",
+    "plugin"
+  ],
+  "author": "Minglei Tu <tmlneu@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "lodash-node": "~2.4.1"
+  },
+  "devDependencies": {
+    "browserify": "~4.1.6",
+    "chai": "~1.9.1",
+    "mocha": "~1.20.0"
+  }
+}
