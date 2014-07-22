@@ -17,11 +17,8 @@ function _mkOptions(action, options, names) {
 
 function brbower(browserify, options) {
 	options = options || {};
-	var workinglist = [];
-
-	if (options.include === '*') options.include = null;
-
-	workinglist = _(options.include || utils.componentNames())
+	
+	var workinglist = _(options.include || utils.componentNames())
 		// filter out excluded names
 		.filter(function(name) {
 			var name0 = name.split(':')[0];

@@ -21,6 +21,17 @@ function componentNames(workdir) {
 exports.componentNames = componentNames;
 
 //
+// extract component name from inputting rawname
+//
+function componentName(rawname) {
+	var name = rawname.split(':')[0],
+		index = name.replace('\\', '/').indexOf('/');
+
+	return (index > 0) ? name.substring(0, index) : name;
+}
+exports.componentName = componentName;
+
+//
 // resolve and return entry file's full path for specified component
 //
 function resolve(name, workdir) {
@@ -39,14 +50,3 @@ function resolve(name, workdir) {
 	}
 }
 exports.resolve = resolve;
-
-//
-// extract component name from inputting rawname
-//
-function componentName(rawname) {
-	var name = rawname.split(':')[0],
-		index = name.replace('\\', '/').indexOf('/');
-
-	return (index > 0) ? name.substring(0, index) : name;
-}
-exports.componentName = componentName;
