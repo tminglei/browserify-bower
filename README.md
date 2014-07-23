@@ -3,8 +3,8 @@ brbower
 
 [![NPM](https://nodei.co/npm/brbower.png)](https://nodei.co/npm/brbower/)
 
-Let `brbower` plugin require bower components for you in build scripts, then in application codes you can treat them as normal node modules.  
-You can also provided external options, to let it external specified bower components for you when building multiple bundles.
+Let `brbower` plugin require bower components for you when building bundles, then you can treat them as normal node modules in application codes.  
+You can also provide external config, to guide `brbower` to external some bower components, which is useful when when building multiple bundles.
 
 
 # install
