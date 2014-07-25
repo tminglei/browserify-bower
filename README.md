@@ -37,15 +37,15 @@ var comp2 = require('alias2');
 # options
 ![brbower config](https://raw.githubusercontent.com/tminglei/brbower/master/doc/brbower-config.png)
 
-**action:** _string_, available values: `require` | `external`, default `require`  
-_(guide `brbower` to **require**/**external** specified bower components for final bundle)_  
+**action:** _string_, guide `brbower` to **require**/**external** specified bower components; available values: `require` | `external`, default `require`  
 
-**action config:** _string array or map object_, example value:  
-`[name1, name2, ...]` | `{ include: [name1, name2, ...], exclude: [name5, ...], alias: [name8, ...] }`
+**action config:** _string array or map object_, options: `include` | `exclude` | `alias`, examples:  
+a) ['comp1', 'comp2', ...]  
+b) { exclude: ['comp5', 'comp7'], alias: ['comp1:alias1'] }
 
 _Notes:_  
-_1) In action config, `[name1, name2, ...]` will be treated as `{ include: [name1, name2, ...] }`_  
-_2) name format: `name[:alias]`_
+_1) In action config, `[name1, name2, ...]` will be treated as `{ include: [name1, name2, ...] }`;_  
+_2) for above, `name` format: `name[:alias]`_
 
 #### _Additional Rules:_
 - if options undefined, `{ require: [all bower dependency names] }` will be used
