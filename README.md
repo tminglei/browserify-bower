@@ -65,7 +65,7 @@ tminglei@T500 ~/repos/brbower/test $ bower install
 tminglei@T500 ~/repos/brbower/test $ cd ..
 tminglei@T500 ~/repos/brbower $ npm test
 
-	> brbower@0.1.0 test D:\TMLs\repos\brbower
+	> brbower@0.1.0 test ~/repos/brbower
 	> mocha
 
 
