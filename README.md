@@ -16,6 +16,7 @@ npm install brbower
 ```
 
 # usage
+In your task runner like `gulp`, add this plugin to `browserify`:
 ```javascript
 b.plugin('brbower', {
 	require: ['comp1', 'comp2:alias2'],
@@ -23,6 +24,14 @@ b.plugin('brbower', {
 		exclude: ['comp1', 'comp2']
 	}
 });
+```
+_p.s. of course, you can also configure it in node `package.json`._
+
+And in application codes, you can just require it as below, not care about whether it's really an node module or a bower component:
+```javascript
+var comp1 = require('comp1');
+var comp2 = require('alias2');
+...
 ```
 
 # options
@@ -42,6 +51,10 @@ _(guide `brbower` to **require**/**external** specified bower components for fin
 - if options undefined, `{ require: [all bower dependency names] }` will be used
 - if options..include undefined, `[all bower dependency names]` will be used
 - if both include/exclude and alias declared an alias for a component, declaration in alias will be used
+
+# history
+v0.1.0 (22-July-2014):  
+1) first release (works fine in my personal project)
 
 # license
 
