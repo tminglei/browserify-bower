@@ -43,16 +43,60 @@ _(guide `brbower` to **require**/**external** specified bower components for fin
 **action config:** _string array or map object_, example value:  
 `[name1, name2, ...]` | `{ include: [name1, name2, ...], exclude: [name5, ...], alias: [name8, ...] }`
 
-> _Notes:_  
-> In action config, `[name1, name2, ...]` will be treated as `{ require: [name1, name2, ...] }`  
-> name format: `name[:alias]`
+_Notes:_  
+_1) In action config, `[name1, name2, ...]` will be treated as `{ include: [name1, name2, ...] }`_  
+_2) name format: `name[:alias]`_
 
-### _Additional Rules:_
+#### _Additional Rules:_
 - if options undefined, `{ require: [all bower dependency names] }` will be used
 - if options..include undefined, `[all bower dependency names]` will be used
 - if both include/exclude and alias declared an alias for a component, declaration in alias will be used
 
+# run test
+You need ensure related node modules (for `brbower`) and bower components (for test codes) installed, then run `npm test`.
+
+For first time, you can do it like this:
+```sh
+tminglei@T500 ~/repos/brbower $ npm install
+...
+tminglei@T500 ~/repos/brbower $ cd test
+tminglei@T500 ~/repos/brbower/test $ bower install
+...
+tminglei@T500 ~/repos/brbower/test $ cd ..
+tminglei@T500 ~/repos/brbower $ npm test
+
+	> brbower@0.1.0 test D:\TMLs\repos\brbower
+	> mocha
+
+
+	  ....
+
+	  4 passing (580ms)
+
+tminglei@T500 ~/repos/brbower $
+```
+# diffenence with `debowerify`
+`brbower` and `debowerify` try to resolve same problem (_p.s. in fact, brbower's test codes were copied from `debowerify`, many thanks ^^_), but by different ways.
+
+debowerify's way: analyze every js files of the application, to find/replace require string for bower components with their real paths
+brbower's way: pre resolve specified bower components and require them to browserify, then when required, they're already there
+
+Here's some features or pros/cons:
+|                             |   brbower                     |  debowerify                                    |
+| --------------------------- | ----------------------------- | ---------------------------------------------- |
+| require submodules <br> _(in application codes)_ | support <br> _(through `brbower/utils`)_ | support <br> _(built-in)_ |
+| require ... in html/template files | OK               | not OK <br> _(since it doesn't anaylze html/template files)_ |
+| individual require/external <br> _(in build scripts)_ | easy <br> _(with options)_ | not so easy <br> _(through `bower-resolve`)_ |
+| work mode                   | synchronous                   | asynchronous <br> _(since it depends on bower's resolving results)_ |
+| performance                 | slight and quickly            | slowly <br> _(since it analyzes every js files of the application)_ |
+
+
 # history
+v0.1.2 (25-July-2014):  
+1) include all components declared in `dependencies` and `devDependencies` of bower.json, not only `dependencies`, if options..include undefined  
+2) allow to specify workdir, where to determine bower components' home dir; default `process.cwd()`  
+3) document improvement
+
 v0.1.0 (22-July-2014):  
 1) first release (works fine in my personal project)
 

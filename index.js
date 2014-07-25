@@ -4,22 +4,24 @@ var path = require('path');
 var utils = require('./utils');
 var _  = require('lodash-node');
 
-module.exports = function (browserify, options) {
-	options = options || { "require": utils.componentNames() };
+var _workdir = process.cwd();
 
-	_(options).forEach(function(conf, action) {
-		if (_(conf).isArray()) conf = { "include": conf };
+var brbower = module.exports = function (browserify, options) {
+	options = options || { "require": utils.componentNames(_workdir) };
 
-		var workinglist = _(conf.include || utils.componentNames())
+	_(options).forEach(function(config, action) {
+		if (_(config).isArray()) config = { "include": config };
+
+		var workinglist = _(config.include || utils.componentNames(_workdir))
 			// filter out excluded names
 			.filter(function(name) {
-				return !_(conf.exclude).map(function(name1) {
+				return !_(config.exclude).map(function(name1) {
 					return name1.split(':')[0];
 				}).contains(name.split(':')[0]);
 			})
 			// merge in alias configs
 			.map(function(name) {
-				var found = _(conf.alias).find(function(name1) {
+				var found = _(config.alias).find(function(name1) {
 					return name.split(':')[0] === name1.split(':')[0];
 				});
 				return found || name;
@@ -31,7 +33,7 @@ module.exports = function (browserify, options) {
 				return {
 					name:  name,
 					alias: alias || name,
-					path: utils.resolve(name)
+					path: utils.resolve(name, _workdir)
 				};
 			});
 
@@ -49,4 +51,9 @@ module.exports = function (browserify, options) {
 			});
 		}
 	});
+};
+
+brbower.setWorkdir = function (workdir) {
+	_workdir = workdir || _workdir;
+	return brbower;
 };

@@ -1,6 +1,6 @@
 {
   "name": "brbower",
-  "version":"0.1.0",
+  "version":"0.1.2",
   "description": "a browserify plugin, to enable you use bower components just like node modules",
   "main": "index.js",
   "repository": {
@@ -23,5 +23,11 @@
     "browserify": "~4.1.6",
     "chai": "~1.9.1",
     "mocha": "~1.20.0"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "node_modules/.bin/mocha"
   }
 }

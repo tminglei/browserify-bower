@@ -1,0 +1,7 @@
+{
+  "name": "test-package-a",
+  "main": "index.js",
+  "dependencies": {
+    "test-package-b": "./fixtures/test-package-b"
+  }
+}
