@@ -63,7 +63,7 @@ tminglei@T500 ~/repos/brbower/test $ bower install
 tminglei@T500 ~/repos/brbower/test $ cd ..
 tminglei@T500 ~/repos/brbower $ npm test
 
-	> brbower@0.1.0 test ~/repos/brbower
+	> brbower@0.2.0 test ~/repos/brbower
 	> mocha
 
 
@@ -77,10 +77,10 @@ tminglei@T500 ~/repos/brbower $
 `brbower` and `debowerify` try to resolve same problem, but by different ways.  
 _(p.s. in fact, brbower's test codes were copied and modified from `debowerify`, thanks so much ^^)_
 
-debowerify's way: analyze every js files of the application, to find/replace require string for bower components with their real paths  
-brbower's way: pre resolve specified bower components and require them to browserify, then when required, they're already there
+**debowerify's way:** analyze every js files of the application, to find/replace require string for bower components with their real paths  
+**brbower's way:** pre resolve specified bower components and require them to browserify, then when required, they're already there
 
-#### Comparison of `brbower` and `debowerify`:
+#### Comparison of `brbower` and `debowerify`:  
 |                             |   brbower                     |  debowerify                                    |
 | --------------------------- | ----------------------------- | ---------------------------------------------- |
 | require submodules <br> _(in application codes)_ | support <br> _(through `brbower/utils`)_ | support <br> _(built-in)_ |
@@ -91,7 +91,7 @@ brbower's way: pre resolve specified bower components and require them to browse
 
 
 # history
-v0.1.2 (25-July-2014):  
+v0.2.0 (25-July-2014):  
 1) added tests  
 2) document improvement  
 3) logic change: include all components declared in `dependencies` and `devDependencies` of bower.json, not only `dependencies`, if options..include undefined  
