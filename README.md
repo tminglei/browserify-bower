@@ -76,8 +76,8 @@ tminglei@T500 ~/repos/brbower $ npm test
 tminglei@T500 ~/repos/brbower $
 ```
 # diffenence with `debowerify`
-`brbower` and `debowerify` try to resolve same problem, but by different ways.
-_(p.s. in fact, brbower's test codes were copied from `debowerify`, many thanks ^^)_
+`brbower` and `debowerify` try to resolve same problem, but by different ways.  
+_(p.s. in fact, brbower's test codes were copied and modified from `debowerify`, thanks so much ^^)_
 
 debowerify's way: analyze every js files of the application, to find/replace require string for bower components with their real paths  
 brbower's way: pre resolve specified bower components and require them to browserify, then when required, they're already there
