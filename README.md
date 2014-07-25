@@ -40,8 +40,8 @@ var comp2 = require('alias2');
 **action:** _string_, guide `brbower` to **require**/**external** specified bower components; available values: `require` | `external`, default `require`  
 
 **action config:** _string array or map object_, available config items: `include` | `exclude` | `alias`, examples:  
-a) ['name1', 'name2', ...] _(p.s. will be treated as `{ include: [name1, name2, ...] }`)_  
-b) { exclude: ['comp5', 'comp7'], alias: ['comp1:alias1'] }
+a) `['name1', 'name2', ...]` _(p.s. will be treated as `{ include: [name1, name2, ...] }`)_  
+b) `{ exclude: ['comp5', 'comp7'], alias: ['comp1:alias1'] }`
 
 _Notes: `name` format: `name[:alias]`_
 
@@ -92,9 +92,10 @@ brbower's way: pre resolve specified bower components and require them to browse
 
 # history
 v0.1.2 (25-July-2014):  
-1) include all components declared in `dependencies` and `devDependencies` of bower.json, not only `dependencies`, if options..include undefined  
-2) allow to specify workdir, where to determine bower components' home dir; default `process.cwd()`  
-3) document improvement
+1) added tests  
+2) document improvement  
+3) logic change: include all components declared in `dependencies` and `devDependencies` of bower.json, not only `dependencies`, if options..include undefined  
+4) enhancement: allow to specify workdir, where to determine bower components' home dir; default `process.cwd()`
 
 v0.1.0 (22-July-2014):  
 1) first release (works fine in my personal project)
