@@ -86,6 +86,7 @@ _(p.s. in fact, brbower's test codes were copied and modified from `debowerify`,
 | require submodules <br> _(in application codes)_ | support <br> _(through `brbower/utils`)_ | support <br> _(built-in)_ |
 | require ... in html/template files | OK               | not OK <br> _(since it doesn't anaylze html/template files)_ |
 | individual require/external <br> _(in build scripts)_ | easy <br> _(with options)_ | not so easy <br> _(through `bower-resolve`)_ |
+| extension type              | plugin                        | transform                                                           |
 | work mode                   | synchronous                   | asynchronous <br> _(since it depends on bower's resolving results)_ |
 | performance                 | slight and quickly            | slowly <br> _(since it analyzes every js files of the application)_ |
 
