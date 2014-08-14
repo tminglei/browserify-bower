@@ -27,11 +27,23 @@ b.plugin('brbower', {
 ```
 _p.s. of course, you can also configure it in node `package.json`._
 
-And in application codes, you can just require it as below, not care about whether it's really an node module or a bower component:
-```javascript
+Then, in js or html codes, you can require it like normal node module:
+```
+// in xxx.js
 var comp1 = require('comp1');
 var comp2 = require('alias2');
 ...
+
+// in xx.html
+<div class="container-fluid">
+...
+</div>
+<script type="text/javascript">
+  require('domready')(function() {
+    var comp1 = require('comp1');
+    ...
+  });
+</script>
 ```
 
 # options
@@ -43,7 +55,7 @@ var comp2 = require('alias2');
 a) `['name1', 'name2', ...]` _(p.s. will be treated as `{ include: [name1, name2, ...] }`)_  
 b) `{ exclude: ['comp5', 'comp7'], alias: ['comp1:alias1'] }`
 
-_Notes: `name` format: `name[:alias]`_
+_Notes: `name` format: `name[:alias]`, and name can be component name or submodule like 'base62/lib/base62'._
 
 #### _Additional Rules:_
 - if options undefined, `{ require: [all bower dependency names] }` will be used
@@ -51,7 +63,7 @@ _Notes: `name` format: `name[:alias]`_
 - if both include/exclude and alias declared an alias for a component, declaration in alias will be used
 
 # run test
-You need ensure related node modules (for `brbower`) and bower components (for test codes) installed, then run `npm test`.
+_You need ensure related node modules (for `brbower`) and bower components (for test codes) installed, then run `npm test`._
 
 For first time, you can do it like this:
 ```sh
