@@ -50,7 +50,16 @@ function resolve(name, workdir) {
 		var mainfile = Array.isArray(bowerJson.main) 
 			? bowerJson.main.filter(function(file) { return /\.js$/.test(file); })[0] 
 			: bowerJson.main;
-		return path.join(basedir, mainfile || compName);
+
+		if (mainfile) {
+			return path.join(basedir, mainfile);
+		}	else {
+			if (fs.existsSync(path.join(basedir, "index.js"))) {
+				return path.join(basedir, "index.js");
+			} else {
+				return path.join(basedir, compName);
+			}
+		}
 	}
 }
 exports.resolve = resolve;
