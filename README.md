@@ -3,7 +3,7 @@ brbower
 
 [![NPM](https://nodei.co/npm/brbower.png)](https://nodei.co/npm/brbower/)
 
-Let `brbower` plugin require bower components for you when building bundles, then you can treat them as normal node modules in application codes.  
+Let `brbower` plugin require bower components for you when building bundles, then you can `require` them as normal node modules in application codes.  
 You can also provide external config, to guide `brbower` to external some bower components, which is useful when when building multiple bundles.
 
 
@@ -19,7 +19,7 @@ npm install brbower
 In your task runner like `gulp`, add this plugin to `browserify`:
 ```javascript
 b.plugin('brbower', {
-	require: ['comp1', 'comp2:alias2'],
+	require: ['*', 'base62/lib/base62'],
 	external: {
 		exclude: ['comp1', 'comp2']
 	}
@@ -63,7 +63,7 @@ tminglei@T500 ~/repos/brbower/test $ bower install
 tminglei@T500 ~/repos/brbower/test $ cd ..
 tminglei@T500 ~/repos/brbower $ npm test
 
-	> brbower@0.2.0 test ~/repos/brbower
+	> brbower@0.2.1 test ~/repos/brbower
 	> mocha
 
 
@@ -83,7 +83,7 @@ _(p.s. in fact, brbower's test codes were copied and modified from `debowerify`,
 #### Comparison of `brbower` and `debowerify`:  
 |                             |   brbower                     |  debowerify                                    |
 | --------------------------- | ----------------------------- | ---------------------------------------------- |
-| require submodules <br> _(in application codes)_ | support <br> _(through `brbower/utils`)_ | support <br> _(built-in)_ |
+| require submodules <br> _(in application codes)_ | support <br> _(built-in)_ | support <br> _(built-in)_ |
 | require ... in html/template files | OK               | not OK <br> _(since it doesn't anaylze html/template files)_ |
 | individual require/external <br> _(in build scripts)_ | easy <br> _(with options)_ | not so easy <br> _(through `bower-resolve`)_ |
 | extension type              | plugin                        | transform                                                           |
@@ -92,6 +92,10 @@ _(p.s. in fact, brbower's test codes were copied and modified from `debowerify`,
 
 
 # history
+v0.3.0 (14-Aug-2014):  
+1) built-in support for submodules  
+2) enhancement: if bower.main undefined, check 'index.js' then 'compname'.js
+
 v0.2.0 (25-July-2014):  
 1) added tests  
 2) document improvement  
