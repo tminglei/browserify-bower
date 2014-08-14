@@ -44,12 +44,12 @@ describe('brbower', function() {
   });
 
   it('should be able to brbower a submodule', function(done) {
-    var brutils = require('../utils');
     var jsPath = path.join(__dirname, 'src/by_subpath.js');
     var b = browserify();
-    b.plugin(brbower.setWorkdir(__dirname));
+    b.plugin(brbower.setWorkdir(__dirname), {
+      require: ['*', 'base62/lib/base62']
+    });
     b.add(jsPath);
-    b.require(brutils.resolve('base62/lib/base62', __dirname), { expose: 'base62/lib/base62' })
     b.bundle(function (err, src) {
       if (err) return done(err);
       vm.runInNewContext(src, {

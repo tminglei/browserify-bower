@@ -12,7 +12,19 @@ var brbower = module.exports = function (browserify, options) {
 	_(options).forEach(function(config, action) {
 		if (_(config).isArray()) config = { "include": config };
 
+		var aliasConfig = _(config.include).filter(function(name) {
+				return name.indexOf(':') > 0 
+					&& !_(config.alias).any(function(name1) {
+						return name.split(':')[0] === name1.split(':')[0];
+					});
+			}).union(config.alias).value();
+
 		var workinglist = _(config.include || utils.componentNames(_workdir))
+			// process '*' including
+			.map(function(name) {
+				return (name === '*') ? utils.componentNames(_workdir) : name;
+			})
+			.flatten()
 			// filter out excluded names
 			.filter(function(name) {
 				return !_(config.exclude).map(function(name1) {
@@ -21,12 +33,13 @@ var brbower = module.exports = function (browserify, options) {
 			})
 			// merge in alias configs
 			.map(function(name) {
-				var found = _(config.alias).find(function(name1) {
+				var found = _(aliasConfig).find(function(name1) {
 					return name.split(':')[0] === name1.split(':')[0];
 				});
 				return found || name;
 			})
 			// prepare the working list
+			.uniq()
 			.map(function(rawname) {
 				var name = rawname.split(':')[0],
 					alias = rawname.split(':')[1];
