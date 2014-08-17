@@ -25,7 +25,7 @@ b.plugin('brbower', {
 	}
 });
 ```
-_p.s. of course, you can also configure it in node `package.json`._
+_p.s. of course, you can also configure this in node `package.json`._
 
 Then, in js or html codes, you can require it like normal node module:
 ```
