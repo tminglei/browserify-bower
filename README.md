@@ -46,7 +46,7 @@ var comp2 = require('alias2');
 </script>
 ```
 
-**p.s. feel free to use it together with other plugins/transforms, since I didn't hack into `browerify` when implementing it and it won't also change any of your codes.**
+_**p.s. feel free to use it side by other plugins/transforms, since it's a standard `browerify` plugin, no hack, no change to your codes.**_
 
 # options
 ![brbower config](https://raw.githubusercontent.com/tminglei/brbower/master/doc/brbower-config.png)
