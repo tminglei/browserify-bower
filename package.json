@@ -14,8 +14,7 @@
     "browserify",
     "browserify-plugin",
     "plugin",
-    "brbower",
-    "debowerify"
+    "brbower"
   ],
   "author": "Minglei Tu <tmlneu@gmail.com>",
   "license": "MIT",
