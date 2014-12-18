@@ -12,6 +12,7 @@
     "component",
     "components",
     "browserify",
+    "browserify-plugin",
     "plugin",
     "brbower",
     "debowerify"
