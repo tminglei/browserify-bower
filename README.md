@@ -117,6 +117,9 @@ _(p.s. in fact, browserify-bower's test codes were copied and modified from `deb
 
 
 # history
+v0.4.0 (20-Dec-2014):  
+1) add command line support  
+
 v0.3.0 (14-Aug-2014):  
 1) built-in support for submodules  
 2) enhancement: if bower.main undefined, check 'index.js' then 'compname'.js
