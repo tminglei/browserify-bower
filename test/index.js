@@ -5,9 +5,9 @@ var expect = require('chai').expect,
     brbower = require('..'),
     fs = require('fs');
 
-describe('brbower', function() {
+describe('browserify-bower', function() {
 
-  it('should be able to brbower a basic file from dependencies', function(done) {
+  it('should be able to browserify-bower a basic file from dependencies', function(done) {
     var jsPath = path.join(__dirname, 'src/index.js');
     var b = browserify();
     b.plugin(brbower.setWorkdir(__dirname));
@@ -25,7 +25,7 @@ describe('brbower', function() {
     });
   });
 
-  it('should be able to brbower a basic file from devDependencies', function(done) {
+  it('should be able to browserify-bower a basic file from devDependencies', function(done) {
     var jsPath = path.join(__dirname, 'src/base62test.js');
     var b = browserify();
     b.plugin(brbower.setWorkdir(__dirname));
@@ -43,7 +43,7 @@ describe('brbower', function() {
     });
   });
 
-  it('should be able to brbower a submodule', function(done) {
+  it('should be able to browserify-bower a submodule', function(done) {
     var jsPath = path.join(__dirname, 'src/by_subpath.js');
     var b = browserify();
     b.plugin(brbower.setWorkdir(__dirname), {
@@ -63,7 +63,7 @@ describe('brbower', function() {
     });
   });
 
-  it('should be able to brbower a module with other dependencies', function(done) {
+  it('should be able to browserify-bower a module with other dependencies', function(done) {
     var b = browserify();
     b.plugin(brbower.setWorkdir(__dirname));
     b.add(path.join(__dirname, 'src/deep_dependencies_test.js'));

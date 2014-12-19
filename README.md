@@ -1,10 +1,10 @@
-brbower
-=======
+browserify-bower
+================
 
-[![NPM](https://nodei.co/npm/brbower.png)](https://nodei.co/npm/brbower/)
+[![NPM](https://nodei.co/npm/browserify-bower.png)](https://nodei.co/npm/browserify-bower/)
 
-Let `brbower` plugin require bower components for you when building bundles, then you can `require` them as normal node modules in application codes.  
-You can also provide external config, to guide `brbower` to external some bower components, which is useful when when building multiple bundles.
+Let `browserify-bower` plugin require bower components for you when building bundles, then you can `require` them as normal node modules in application codes.  
+You can also provide external config, to guide `browserify-bower` to external some bower components, which is useful when when building multiple bundles.
 
 
 # install
@@ -12,13 +12,14 @@ You can also provide external config, to guide `brbower` to external some bower 
 With [npm](https://npmjs.org) do:
 
 ```
-npm install brbower
+npm install browserify-bower
 ```
 
 # usage
+## Programmatic API
 In your task runner like `gulp`, add this plugin to `browserify`:
 ```javascript
-b.plugin('brbower', {
+b.plugin('browserify-bower', {
 	require: ['*', 'base62/lib/base62'],
 	external: {
 		exclude: ['comp1', 'comp2']
@@ -46,12 +47,22 @@ var comp2 = require('alias2');
 </script>
 ```
 
+## Command Line
+Use conf file,
+```shell
+$ browserify entry.js -d -p [browserify-bower --conf conf.json] > bundle.js
+```
+Use conf json string,
+```shell
+$ browserify entry.js -d -p [browserify-bower --optjson '{"require": ["comp1", "comp2:alias2"], "external": {"exclude": ["comp1", "comp2"]}}'] > bundle.js
+```
+
 _**p.s. feel free to use it side by other plugins/transforms, since it's a standard [`browserify`](https://github.com/substack/node-browserify) plugin, no hack, no change to your codes.**_
 
 # options
-![brbower config](https://raw.githubusercontent.com/tminglei/brbower/master/doc/brbower-config.png)
+![browserify-bower config](https://raw.githubusercontent.com/tminglei/browserify-bower/master/doc/browserify-bower-config.png)
 
-**action:** _string_, guide `brbower` to **require**/**external** specified bower components; available values: `require` | `external`, default `require`  
+**action:** _string_, guide `browserify-bower` to **require**/**external** specified bower components; available values: `require` | `external`, default `require`  
 
 **action config:** _string array or map object_, available config items: `include` | `exclude` | `alias`, examples:  
 a) `['name1', 'name2', ...]` _(p.s. will be treated as `{ include: [name1, name2, ...] }`)_  
@@ -65,19 +76,19 @@ _Notes: `name` format: `name[:alias]`, and name can be component name or submodu
 - if both include/exclude and alias declared an alias for a component, declaration in alias will be used
 
 # run test
-_You need ensure related node modules (for `brbower`) and bower components (for test codes) installed, then run `npm test`._
+_You need ensure related node modules (for `browserify-bower`) and bower components (for test codes) installed, then run `npm test`._
 
 For first time, you can do it like this:
 ```sh
-tminglei@T500 ~/repos/brbower $ npm install
+browserify-bower $ npm install
 ...
-tminglei@T500 ~/repos/brbower $ cd test
-tminglei@T500 ~/repos/brbower/test $ bower install
+browserify-bower $ cd test
+browserify-bower/test $ bower install
 ...
-tminglei@T500 ~/repos/brbower/test $ cd ..
-tminglei@T500 ~/repos/brbower $ npm test
+browserify-bower/test $ cd ..
+browserify-bower $ npm test
 
-	> brbower@0.2.1 test ~/repos/brbower
+	> browserify-bower@0.4.0 test ~/repos/browserify-bower
 	> mocha
 
 
@@ -85,17 +96,17 @@ tminglei@T500 ~/repos/brbower $ npm test
 
 	  4 passing (580ms)
 
-tminglei@T500 ~/repos/brbower $
+browserify-bower $
 ```
 # diffenence with `debowerify`
-`brbower` and `debowerify` try to resolve same problem, but by different ways.  
-_(p.s. in fact, brbower's test codes were copied and modified from `debowerify`, thanks so much ^^)_
+`browserify-bower` and `debowerify` try to resolve same problem, but by different ways.  
+_(p.s. in fact, browserify-bower's test codes were copied and modified from `debowerify`, thanks so much ^^)_
 
 **debowerify's way:** analyze every js files of the application, to find/replace require string for bower components with their real paths  
-**brbower's way:** pre resolve specified bower components and require them to browserify, then when required, they're already there
+**browserify-bower's way:** pre resolve specified bower components and require them to browserify, then when required, they're already there
 
-#### Comparison of `brbower` and `debowerify`:  
-|                             |   brbower                     |  debowerify                                    |
+#### Comparison of `browserify-bower` and `debowerify`:  
+|                             |   browserify-bower            |  debowerify                                    |
 | --------------------------- | ----------------------------- | ---------------------------------------------- |
 | require submodules <br> _(in application codes)_ | support <br> _(built-in)_ | support <br> _(built-in)_ |
 | require ... in html/template files | OK               | not OK <br> _(since it doesn't anaylze html/template files)_ |

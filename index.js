@@ -9,6 +9,9 @@ var _workdir = process.cwd();
 var brbower = module.exports = function (browserify, options) {
 	options = options || { "require": utils.componentNames(_workdir) };
 
+	if (options.conf) options = require(path.join(process.cwd(), options.conf));
+	if (options.optjson) options = JSON.parse(options.optjson);
+
 	_(options).forEach(function(config, action) {
 		if (_(config).isArray()) config = { "include": config };
 
