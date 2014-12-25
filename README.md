@@ -57,7 +57,7 @@ Use a node of the conf json,
 $ browserify entry.js -d -p [browserify-bower --conf conf.json --confnode aa.bbb] > bundle.js
 ```
 
-### workdir
+## workdir
 By default, `browserify-bower` will try to find the working bower components dir from the dir of `process.cwd()`. But you can specify another one.
 
 In programmatic API, pls use like `b.plugin(browserifyBower.workdir(thedir), {..})`.
