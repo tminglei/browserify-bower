@@ -10,7 +10,7 @@ describe('browserify-bower', function() {
   it('should be able to browserify-bower a basic file from dependencies', function(done) {
     var jsPath = path.join(__dirname, 'src/index.js');
     var b = browserify();
-    b.plugin(brbower.setWorkdir(__dirname));
+    b.plugin(brbower.workdir(__dirname));
     b.add(jsPath);
     b.bundle(function (err, src) {
       if (err) return done(err);
@@ -28,7 +28,7 @@ describe('browserify-bower', function() {
   it('should be able to browserify-bower a basic file from devDependencies', function(done) {
     var jsPath = path.join(__dirname, 'src/base62test.js');
     var b = browserify();
-    b.plugin(brbower.setWorkdir(__dirname));
+    b.plugin(brbower.workdir(__dirname));
     b.add(jsPath);
     b.bundle(function (err, src) {
       if (err) return done(err);
@@ -46,7 +46,7 @@ describe('browserify-bower', function() {
   it('should be able to browserify-bower a submodule', function(done) {
     var jsPath = path.join(__dirname, 'src/by_subpath.js');
     var b = browserify();
-    b.plugin(brbower.setWorkdir(__dirname), {
+    b.plugin(brbower.workdir(__dirname), {
       require: ['*', 'base62/lib/base62']
     });
     b.add(jsPath);
@@ -65,7 +65,7 @@ describe('browserify-bower', function() {
 
   it('should be able to browserify-bower a module with other dependencies', function(done) {
     var b = browserify();
-    b.plugin(brbower.setWorkdir(__dirname));
+    b.plugin(brbower.workdir(__dirname));
     b.add(path.join(__dirname, 'src/deep_dependencies_test.js'));
     b.bundle(function (err, src) {
       if (err) return done(err);

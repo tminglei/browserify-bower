@@ -52,12 +52,19 @@ Use conf file,
 ```shell
 $ browserify entry.js -d -p [browserify-bower --conf conf.json] > bundle.js
 ```
-Use conf json string,
+Use a node of the conf json,
 ```shell
-$ browserify entry.js -d -p [browserify-bower --optjson '{"require": ["comp1", "comp2:alias2"], "external": {"exclude": ["comp1", "comp2"]}}'] > bundle.js
+$ browserify entry.js -d -p [browserify-bower --conf conf.json --confnode aa.bbb] > bundle.js
 ```
 
-_**p.s. feel free to use it side by other plugins/transforms, since it's a standard [`browserify`](https://github.com/substack/node-browserify) plugin, no hack, no change to your codes.**_
+### workdir
+By default, `browserify-bower` will try to find the working bower components dir from the dir of `process.cwd()`. But you can specify another one.
+
+In programmatic API, pls use like `b.plugin(browserifyBower.workdir(thedir), {..})`.
+In command line, pls use parameter `--workdir thedir`.
+
+
+> p.s. feel free to use it side by other plugins/transforms, since it's a standard [`browserify`](https://github.com/substack/node-browserify) plugin, no hack, no change to your codes.
 
 # options
 ![browserify-bower config](https://raw.githubusercontent.com/tminglei/browserify-bower/master/doc/browserify-bower-config.png)
