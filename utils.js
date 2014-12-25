@@ -44,13 +44,18 @@ function resolve(name, workdir) {
 		basedir = path.join(componentsHome(workdir), compName),
 		bowerJson = require(path.join(basedir, 'bower.json'));
 
-	if (subname && subname.length > 0) {
-		return path.join(basedir, subname);
-	} else {
-		var mainfile = Array.isArray(bowerJson.main) 
-			? bowerJson.main.filter(function(file) { return /\.js$/.test(file); })[0] 
-			: bowerJson.main;
+	var mainfile = Array.isArray(bowerJson.main) 
+		? bowerJson.main.filter(function(file) { return /\.js$/.test(file); })[0] 
+		: bowerJson.main;
 
+	if (subname && subname.length > 0) {
+		var subpath = mainfile && path.join(basedir, mainfile, '..', subname);
+		if (subpath && (fs.existsSync(subpath) || fs.existsSync(subpath + '.js'))) {
+			return path.join(basedir, mainfile, '..', subname);
+		} else {
+			return path.join(basedir, subname);
+		}
+	} else {
 		if (mainfile) {
 			return path.join(basedir, mainfile);
 		}	else {
