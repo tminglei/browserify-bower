@@ -3,6 +3,8 @@ browserify-bower
 
 [![NPM](https://nodei.co/npm/browserify-bower.png)](https://nodei.co/npm/browserify-bower/)
 
+_(former name `brbower`)_
+
 Let `browserify-bower` plugin require bower components for you when building bundles, then you can `require` them as normal node modules in application codes.  
 You can also provide external config, to guide `browserify-bower` to external some bower components, which is useful when when building multiple bundles.
 
