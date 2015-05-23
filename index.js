@@ -18,7 +18,7 @@ module.exports.workdir = function(workdir) {
 function browserifyBower(browserify, options) {
 	options = options || { "require": utils.componentNames(_workdir) };
 
-	if (options.workdir) _workdir = workdir;
+	if (options.workdir) _workdir = options.workdir;
 	if (options.conf) {
 		var confjson = require(path.join(_workdir, options.conf));
 		options = options.confnode && dotAccess.get(confjson, options.confnode) || confjson;
