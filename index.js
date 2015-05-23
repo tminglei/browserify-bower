@@ -2,7 +2,7 @@
 
 var path = require('path');
 var utils = require('./utils');
-var _  = require('lodash-node');
+var _  = require('lodash');
 var dotAccess = require('dot-access');
 
 var _workdir = process.cwd();
@@ -16,7 +16,9 @@ module.exports.workdir = function(workdir) {
 //////////////////////////////////////////////////////////////////////////////
 
 function browserifyBower(browserify, options) {
-	options = options || { "require": utils.componentNames(_workdir) };
+	if (_.isEmpty(options)) {
+		options = { "require": utils.componentNames(_workdir) };
+	}	
 
 	if (options.workdir) _workdir = options.workdir;
 	if (options.conf) {
@@ -24,16 +26,19 @@ function browserifyBower(browserify, options) {
 		options = options.confnode && dotAccess.get(confjson, options.confnode) || confjson;
 	}
 
-	_(options).forEach(function(config, action) {
+	_.forEach(options, function(config, action) {
 		if (_(['require', 'external']).contains(action)) {
 			if (_(config).isArray()) config = { "include": config };
 
-			var aliasConfig = _(config.include).filter(function(name) {
-					return name.indexOf(':') > 0 
+			var aliasConfig = _(config.include)
+				.filter(function(name) {
+					return name.indexOf(':') > 0
 						&& !_(config.alias).any(function(name1) {
-							return name.split(':')[0] === name1.split(':')[0];
-						});
-				}).union(config.alias).value();
+								return name.split(':')[0] === name1.split(':')[0];
+							});
+				})
+				.union(config.alias)
+				.value();
 
 			var workinglist = _(config.include || utils.componentNames(_workdir))
 				// process '*' including
@@ -56,7 +61,7 @@ function browserifyBower(browserify, options) {
 				})
 				// prepare the working list
 				.uniq()
-				.map(function(rawname) {
+				.map(function(rawname) {					
 					var name = rawname.split(':')[0],
 						alias = rawname.split(':')[1];
 					return {
@@ -66,15 +71,16 @@ function browserifyBower(browserify, options) {
 					};
 				});
 
+
 			///
 			if (action === 'require') {
 				workinglist.forEach(function(item) {
 					browserify.require(item.path, { expose: item.alias });
-				});
+				}).value();
 			} else { // external
 				workinglist.forEach(function(item) {
 					browserify.external(item.alias);
-				});
+				}).value();
 			}
 		}
 	});

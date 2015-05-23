@@ -19,13 +19,13 @@
   "author": "Minglei Tu <tmlneu@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "dot-access": "0.0.4",
-    "lodash-node": "~2.4.1"
+    "dot-access": "~1.0.0",
+    "lodash": "~3.9.1"
   },
   "devDependencies": {
-    "browserify": "~7.0.3",
-    "chai": "~1.9.1",
-    "mocha": "~1.20.0"
+    "browserify": "~10.2.1",
+    "chai": "~2.3.0",
+    "mocha": "~2.2.5"
   },
   "directories": {
     "test": "test"
