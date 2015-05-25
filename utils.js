@@ -2,7 +2,7 @@
 
 var path = require('path');
 var fs 	 = require('fs');
-var _  = require('lodash-node');
+var _  = require('lodash');
 
 //
 // determine bower components home dir, maybe need to get dir name from '.bowerrc'
