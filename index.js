@@ -82,8 +82,6 @@ function browserifyBower(browserify, options) {
 					return item;
 				});
 
-			console.log(workinglist.value());
-
 			///
 			if (action === 'require') {
 				workinglist.forEach(function(item) {
