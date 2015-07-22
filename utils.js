@@ -35,7 +35,7 @@ function componentNames(workdir) {
 exports.componentNames = componentNames;
 
 //
-// resolve and return entry file's full path for specified component
+// resolve and return entry file's full path w/ deps for specified component
 //
 function resolve(name, workdir) {
 	workdir = workdir || process.cwd();
@@ -48,23 +48,35 @@ function resolve(name, workdir) {
 		? bowerJson.main.filter(function(file) { return /\.js$/.test(file); })[0] 
 		: bowerJson.main;
 
+	var entryPath = '';
 	if (subname && subname.length > 0) {
 		var subpath = mainfile && path.join(basedir, mainfile, '..', subname);
 		if (subpath && (fs.existsSync(subpath) || fs.existsSync(subpath + '.js'))) {
-			return path.join(basedir, mainfile, '..', subname);
+			entryPath = path.join(basedir, mainfile, '..', subname);
 		} else {
-			return path.join(basedir, subname);
+			entryPath = path.join(basedir, subname);
 		}
 	} else {
 		if (mainfile) {
-			return path.join(basedir, mainfile);
-		}	else {
+			entryPath = path.join(basedir, mainfile);
+		} else {
 			if (fs.existsSync(path.join(basedir, "index.js"))) {
-				return path.join(basedir, "index.js");
+				entryPath = path.join(basedir, "index.js");
 			} else {
-				return path.join(basedir, compName);
+				entryPath = path.join(basedir, compName);
 			}
 		}
 	}
+
+	var deps = (subname && subname.length > 0) ? [] // don't resolve deps for partial reference
+		: _(bowerJson.dependencies || {})
+			.map(function(ver, name) {
+				return resolve(name, workdir);
+			}).flatten().value();
+
+	return [{
+		name: name,
+		path: entryPath
+	}].concat(deps);
 }
 exports.resolve = resolve;

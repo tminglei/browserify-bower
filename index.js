@@ -30,7 +30,7 @@ function browserifyBower(browserify, options) {
 		if (_(['require', 'external']).contains(action)) {
 			if (_(config).isArray()) config = { "include": config };
 
-			var aliasConfig = _(config.include)
+			var aliasConfigs = _(config.include)
 				.filter(function(name) {
 					return name.indexOf(':') > 0
 						&& !_(config.alias).any(function(name1) {
@@ -38,6 +38,12 @@ function browserifyBower(browserify, options) {
 							});
 				})
 				.union(config.alias)
+				.map(function(rawname) {
+					return {
+						name: rawname.split(':')[0],
+						alias: rawname.split(':')[1]
+					}
+				})
 				.value();
 
 			var workinglist = _(config.include || utils.componentNames(_workdir))
@@ -52,25 +58,31 @@ function browserifyBower(browserify, options) {
 						return name1.split(':')[0];
 					}).contains(name.split(':')[0]);
 				})
-				// merge in alias configs
-				.map(function(name) {
-					var found = _(aliasConfig).find(function(name1) {
-						return name.split(':')[0] === name1.split(':')[0];
-					});
-					return found || name;
-				})
-				// prepare the working list
+				// resolve name and deps
 				.uniq()
 				.map(function(rawname) {					
-					var name = rawname.split(':')[0],
-						alias = rawname.split(':')[1];
+					var name = rawname.split(':')[0];
+					return utils.resolve(name, _workdir);
+				})
+				// prepare the working list
+				.flatten()
+				.groupBy(function(item) {
+					return item.name;
+				})
+				.map(function(list, name) {
 					return {
-						name:  name,
-						alias: alias || name,
-						path: utils.resolve(name, _workdir)
+						name: name,
+						path: list[0].path
 					};
+				})
+				// merge in alias configs
+				.map(function(item) {
+					var found  = _.find(aliasConfigs, { name: item.name });
+					item.alias = found ? found.alias : item.name;
+					return item;
 				});
 
+			console.log(workinglist.value());
 
 			///
 			if (action === 'require') {
