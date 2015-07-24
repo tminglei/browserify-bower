@@ -42,7 +42,15 @@ function resolve(name, workdir) {
 	var compName = componentName(name),
 		subname = name.substring(compName.length + 1),
 		basedir = path.join(componentsHome(workdir), compName),
+		bowerJson;
+
+	if (fs.existsSync(path.join(basedir, 'bower.json'))) {
 		bowerJson = require(path.join(basedir, 'bower.json'));
+	} else if (path.join(basedir, '.bower.json')) {
+		bowerJson = require(path.join(basedir, '.bower.json'));
+	} else {
+		throw new Error('CANNOT find bower.json or .bower.json for module: ' + compName);
+	}
 
 	var mainfile = Array.isArray(bowerJson.main) 
 		? bowerJson.main.filter(function(file) { return /\.js$/.test(file); })[0] 
