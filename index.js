@@ -14,37 +14,33 @@ module.exports.workdir = function(workdir) {
 };
 
 //////////////////////////////////////////////////////////////////////////////
+/**
+ * alias can be configured at: options.alias > currConfig.alias > currConfig.include (later can override former)
+ **/
+function getAliasConfigs(options, currConfig) {
+	var aliasConfigs = {};
 
-function browserifyBower(browserify, options) {
-	if (_.isEmpty(options)) {
-		options = { "require": utils.componentNames(_workdir) };
-	}	
+	_.forEach((options.alias || []).concat(currConfig.alias || []).concat(currConfig.include || []), 
+		function(rawname) {
+			if (rawname.indexOf(':') > 0) {
+				var name = rawname.split(':')[0],
+						alias= rawname.split(':')[1];
 
-	if (options.workdir) _workdir = options.workdir;
-	if (options.conf) {
-		var confjson = require(path.join(_workdir, options.conf));
-		options = options.confnode && dotAccess.get(confjson, options.confnode) || confjson;
-	}
+				aliasConfigs[name] = alias;
+			}
+		});
+
+	return aliasConfigs;
+}
+
+function getWorkingLists(options) {
+	var workinglists = {};
 
 	_.forEach(options, function(config, action) {
 		if (_(['require', 'external']).contains(action)) {
 			if (_(config).isArray()) config = { "include": config };
 
-			var aliasConfigs = _(config.include)
-				.filter(function(name) {
-					return name.indexOf(':') > 0
-						&& !_(config.alias).any(function(name1) {
-								return name.split(':')[0] === name1.split(':')[0];
-							});
-				})
-				.union(config.alias)
-				.map(function(rawname) {
-					return {
-						name: rawname.split(':')[0],
-						alias: rawname.split(':')[1]
-					}
-				})
-				.value();
+			var aliasConfigs = getAliasConfigs(options, config);
 
 			var workinglist = _(config.include || utils.componentNames(_workdir))
 				// process '*' including
@@ -71,27 +67,44 @@ function browserifyBower(browserify, options) {
 				})
 				.map(function(list, name) {
 					return {
-						name: name,
-						path: list[0].path
+						name : name,
+						alias: aliasConfigs[name] || name, // merge in alias configs
+						path : list[0].path
 					};
-				})
-				// merge in alias configs
-				.map(function(item) {
-					var found  = _.find(aliasConfigs, { name: item.name });
-					item.alias = found ? found.alias : item.name;
-					return item;
-				});
+				}).value();
 
 			///
-			if (action === 'require') {
-				workinglist.forEach(function(item) {
-					browserify.require(item.path, { expose: item.alias });
-				}).value();
-			} else { // external
-				workinglist.forEach(function(item) {
-					browserify.external(item.alias);
-				}).value();
-			}
+			workinglists[action] = workinglist;
 		}
+	});
+
+	return workinglists;
+}
+
+function browserifyBower(browserify, options) {
+	options = options || {};
+	options.require = options.require || utils.componentNames(_workdir);
+
+	if (options.workdir) _workdir = options.workdir;
+	if (options.conf) {
+		var confjson = require(path.join(_workdir, options.conf));
+		options = options.confnode && dotAccess.get(confjson, options.confnode) || confjson;
+	}
+
+	///
+	var workinglists = getWorkingLists(options);
+
+	// if an item existed in both 'require' and 'external' lists, let's remove it from 'require' list
+	workinglists.require = _.filter(workinglists.require || [], function(item) {
+		return ! _.find(workinglists.external || [], { name: item.name });
+	});
+
+	///
+	_.forEach(workinglists.require  || [], function(item) {
+		browserify.require(item.path, { expose: item.alias });
+	});
+
+	_.forEach(workinglists.external || [], function(item) {
+		browserify.external(item.alias);
 	});
 };
