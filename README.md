@@ -25,7 +25,8 @@ b.plugin('browserify-bower', {
 	require: ['*', 'base62/lib/base62'],
 	external: {
 		exclude: ['comp1', 'comp2']
-	}
+	},
+	alias: ['base62/lib/base62:base62']
 });
 ```
 _p.s. of course, you can also configure this in node `package.json`._
@@ -97,7 +98,7 @@ browserify-bower/test $ bower install
 browserify-bower/test $ cd ..
 browserify-bower $ npm test
 
-	> browserify-bower@0.4.0 test ~/repos/browserify-bower
+	> browserify-bower@0.5.0 test ~/repos/browserify-bower
 	> mocha
 
 
@@ -126,6 +127,10 @@ _(p.s. in fact, browserify-bower's test codes were copied and modified from `deb
 
 
 # history
+v0.5.0 (24-July-2015):  
+1) allow alias to be configured from an sibling node of 'require'/'external', too  
+2) enhancement: if an item existed in both 'require' and 'external' lists, let's remove it from 'require' list  
+
 v0.4.0 (20-Dec-2014):  
 1) add command line support  
 

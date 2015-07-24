@@ -1,6 +1,6 @@
 {
   "name": "browserify-bower",
-  "version": "0.4.6",
+  "version": "0.5.0",
   "description": "a browserify plugin, to enable you require bower components just like node modules",
   "main": "index.js",
   "repository": {
