@@ -37,8 +37,6 @@ function getWorkingLists(options) {
 
 	var mainfiles = options.mainfiles || {};
 
-	var mainfiles = options.mainfiles || {};
-
 	_.forEach(options, function(config, action) {
 		if (_(['require', 'external']).contains(action)) {
 			if (_(config).isArray()) config = { "include": config };
@@ -92,8 +90,7 @@ function getWorkingLists(options) {
 function browserifyBower(browserify, options) {
 	options = options || {};
 	options.require = options.require || utils.componentNames(_workdir);
-	// if other reqiure configs are specified but no include, still include all components.
-	if (!options.require.include) options.require.include = utils.componentNames(_workdir);
+	
 	if (options.workdir) _workdir = options.workdir;
 	if (options.conf) {
 		var confjson = require(path.join(_workdir, options.conf));

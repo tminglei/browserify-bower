@@ -8,11 +8,9 @@ var _  = require('lodash');
 // determine bower components home dir, maybe need to get dir name from '.bowerrc'
 //
 function componentsHome(workdir) {
-	var bowerrc = path.join(workdir, '.bowerrc'),
-		defaultHome = path.join(workdir, 'bower_components');
-	var bowerConfig = {};
+	var bowerrc = path.join(workdir, '.bowerrc'), bowerConfig = {};
 	if (fs.existsSync(bowerrc)) bowerConfig = JSON.parse(fs.readFileSync(bowerrc));
-	return bowerConfig.directory ? path.join(workdir, bowerConfig.directory) : defaultHome;
+	return path.join(workdir, bowerConfig.directory || 'bower_components');
 }
 
 //
@@ -57,7 +55,7 @@ function resolve(name, workdir, mainfiles) {
 			exists = fs.existsSync(bowerPath);
 		}
 		if (exists) {
-			var bowerJson = require(bowerPath);
+			bowerJson = require(bowerPath);
 			mainfile = Array.isArray(bowerJson.main)
 				? bowerJson.main.filter(function(file) { return /\.js$/.test(file); })[0]
 				: bowerJson.main;
@@ -67,7 +65,6 @@ function resolve(name, workdir, mainfiles) {
 	var entryPath = '';
 	if (subname && subname.length > 0) {
 		var subpath = mainfile && path.join(basedir, mainfile, '..', subname);
-		var mainfilePath;
 		if (subpath && (fs.existsSync(subpath) || fs.existsSync(subpath + '.js'))) {
 			entryPath = path.join(basedir, mainfile, '..', subname);
 		} else {
