@@ -20,12 +20,11 @@ module.exports.workdir = function(workdir) {
 function getAliasConfigs(options, currConfig) {
 	var aliasConfigs = {};
 
-	_.forEach((options.alias || []).concat(currConfig.alias || []).concat(currConfig.include || []), 
+	_.forEach((options.alias || []).concat(currConfig.alias || []).concat(currConfig.include || []),
 		function(rawname) {
 			if (rawname.indexOf(':') > 0) {
 				var name = rawname.split(':')[0],
 						alias= rawname.split(':')[1];
-
 				aliasConfigs[name] = alias;
 			}
 		});
@@ -36,11 +35,22 @@ function getAliasConfigs(options, currConfig) {
 function getWorkingLists(options) {
 	var workinglists = {};
 
+	var mainfiles = options.mainfiles || {};
+
+	var mainfiles = options.mainfiles || {};
+
 	_.forEach(options, function(config, action) {
 		if (_(['require', 'external']).contains(action)) {
 			if (_(config).isArray()) config = { "include": config };
 
 			var aliasConfigs = getAliasConfigs(options, config);
+
+			var excludeFilter = function(name) {
+				name = name.name || name;
+				return !_(config.exclude).map(function(name1) {
+					return name1.split(':')[0];
+				}).contains(name.split(':')[0]);
+			};
 
 			var workinglist = _(config.include || utils.componentNames(_workdir))
 				// process '*' including
@@ -49,19 +59,17 @@ function getWorkingLists(options) {
 				})
 				.flatten()
 				// filter out excluded names
-				.filter(function(name) {
-					return !_(config.exclude).map(function(name1) {
-						return name1.split(':')[0];
-					}).contains(name.split(':')[0]);
-				})
+				.filter(excludeFilter)
 				// resolve name and deps
 				.uniq()
-				.map(function(rawname) {					
+				.map(function(rawname) {
 					var name = rawname.split(':')[0];
-					return utils.resolve(name, _workdir);
+					return utils.resolve(name, _workdir, mainfiles);
 				})
 				// prepare the working list
 				.flatten()
+				// filter out excluded dependencies
+				.filter(excludeFilter)
 				.groupBy(function(item) {
 					return item.name;
 				})
@@ -84,7 +92,8 @@ function getWorkingLists(options) {
 function browserifyBower(browserify, options) {
 	options = options || {};
 	options.require = options.require || utils.componentNames(_workdir);
-
+	// if other reqiure configs are specified but no include, still include all components.
+	if (!options.require.include) options.require.include = utils.componentNames(_workdir);
 	if (options.workdir) _workdir = options.workdir;
 	if (options.conf) {
 		var confjson = require(path.join(_workdir, options.conf));

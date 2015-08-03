@@ -10,7 +10,9 @@ var _  = require('lodash');
 function componentsHome(workdir) {
 	var bowerrc = path.join(workdir, '.bowerrc'),
 		defaultHome = path.join(workdir, 'bower_components');
-	return (fs.existsSync(bowerrc) && require(bowerrc).directory) || defaultHome;
+	var bowerConfig = {};
+	if (fs.existsSync(bowerrc)) bowerConfig = JSON.parse(fs.readFileSync(bowerrc));
+	return bowerConfig.directory ? path.join(workdir, bowerConfig.directory) : defaultHome;
 }
 
 //
@@ -37,28 +39,35 @@ exports.componentNames = componentNames;
 //
 // resolve and return entry file's full path w/ deps for specified component
 //
-function resolve(name, workdir) {
+function resolve(name, workdir, mainfiles) {
 	workdir = workdir || process.cwd();
 	var compName = componentName(name),
 		subname = name.substring(compName.length + 1),
 		basedir = path.join(componentsHome(workdir), compName),
-		bowerJson;
+		bowerJson = {},
+		mainfile;
 
-	if (fs.existsSync(path.join(basedir, 'bower.json'))) {
-		bowerJson = require(path.join(basedir, 'bower.json'));
-	} else if (path.join(basedir, '.bower.json')) {
-		bowerJson = require(path.join(basedir, '.bower.json'));
+	if (mainfiles[name]) {
+		mainfile = mainfiles[name];
 	} else {
-		throw new Error('CANNOT find bower.json or .bower.json for module: ' + compName);
+		var bowerPath = path.join(basedir, 'bower.json');
+		var exists = fs.existsSync(bowerPath);
+		if (!exists) {
+			bowerPath = path.join(basedir, '.bower.json');
+			exists = fs.existsSync(bowerPath);
+		}
+		if (exists) {
+			var bowerJson = require(bowerPath);
+			mainfile = Array.isArray(bowerJson.main)
+				? bowerJson.main.filter(function(file) { return /\.js$/.test(file); })[0]
+				: bowerJson.main;
+		}
 	}
-
-	var mainfile = Array.isArray(bowerJson.main) 
-		? bowerJson.main.filter(function(file) { return /\.js$/.test(file); })[0] 
-		: bowerJson.main;
 
 	var entryPath = '';
 	if (subname && subname.length > 0) {
 		var subpath = mainfile && path.join(basedir, mainfile, '..', subname);
+		var mainfilePath;
 		if (subpath && (fs.existsSync(subpath) || fs.existsSync(subpath + '.js'))) {
 			entryPath = path.join(basedir, mainfile, '..', subname);
 		} else {
@@ -79,8 +88,10 @@ function resolve(name, workdir) {
 	var deps = (subname && subname.length > 0) ? [] // don't resolve deps for partial reference
 		: _(bowerJson.dependencies || {})
 			.map(function(ver, name) {
-				return resolve(name, workdir);
+				return resolve(name, workdir, mainfiles);
 			}).flatten().value();
+
+	if (!entryPath) throw new Error('Unable to resolve mainfile for component ' + name);
 
 	return [{
 		name: name,
