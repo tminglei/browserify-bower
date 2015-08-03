@@ -45,8 +45,8 @@ function resolve(name, workdir, mainfiles) {
 		bowerJson = {},
 		mainfile;
 
-	if (mainfiles[name]) {
-		mainfile = mainfiles[name];
+	if (mainfiles[compName]) {
+		mainfile = mainfiles[compName];
 	} else {
 		var bowerPath = path.join(basedir, 'bower.json');
 		var exists = fs.existsSync(bowerPath);
