@@ -89,13 +89,14 @@ function getWorkingLists(options) {
 
 function browserifyBower(browserify, options) {
 	options = options || {};
-	options.require = options.require || utils.componentNames(_workdir);
-	
+
 	if (options.workdir) _workdir = options.workdir;
 	if (options.conf) {
 		var confjson = require(path.join(_workdir, options.conf));
 		options = options.confnode && dotAccess.get(confjson, options.confnode) || confjson;
 	}
+	// if no reqiure configs are specified, let it include all components.
+	options.require = options.require || utils.componentNames(_workdir);
 
 	///
 	var workinglists = getWorkingLists(options);
