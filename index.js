@@ -3,7 +3,6 @@
 var path = require('path');
 var utils = require('./utils');
 var _  = require('lodash');
-var dotAccess = require('dot-access');
 
 var _workdir = process.cwd();
 
@@ -104,7 +103,7 @@ function browserifyBower(browserify, options) {
 	if (options.workdir) _workdir = options.workdir;
 	if (options.conf) {
 		var confjson = require(path.join(_workdir, options.conf));
-		options = options.confnode && dotAccess.get(confjson, options.confnode) || confjson;
+		options = options.confnode && _.get(confjson, options.confnode) || confjson;
 	}
 	// if no reqiure configs are specified, let it include all components.
 	options.require = options.require || utils.componentNames(_workdir);

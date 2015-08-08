@@ -19,8 +19,7 @@
   "author": "Minglei Tu <tmlneu@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "dot-access": "~1.0.0",
-    "lodash": "~3.9.1"
+    "lodash": "~3.10.1"
   },
   "devDependencies": {
     "browserify": "~10.2.1",
