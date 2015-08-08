@@ -26,7 +26,10 @@ b.plugin('browserify-bower', {
 	external: {
 		exclude: ['comp1', 'comp2']
 	},
-	alias: ['base62/lib/base62:base62']
+	alias: ['base62/lib/base62:base62'], // or alias: { 'base62/lib/base62':'base62', ... }
+	mainfiles: { // specify the main file for packages without a bower.json
+		'base62': 'main.js'
+	}
 });
 ```
 _p.s. of course, you can also configure this in node `package.json`._
@@ -67,23 +70,8 @@ In programmatic API, pls use like `b.plugin(browserifyBower.workdir(thedir), {..
 In command line, pls use parameter `--workdir thedir`.
 
 
-> p.s. feel free to use it side by other plugins/transforms, since it's a standard [`browserify`](https://github.com/substack/node-browserify) plugin, no hack, no change to your codes.
+> p.s. pls feel free to use it side by other plugins/transforms, since it's a standard [`browserify`](https://github.com/substack/node-browserify) plugin, no hack, no change to your codes.
 
-# options
-![browserify-bower config](https://raw.githubusercontent.com/tminglei/browserify-bower/master/doc/browserify-bower-config.png)
-
-**action:** _string_, guide `browserify-bower` to **require**/**external** specified bower components; available values: `require` | `external`, default `require`  
-
-**action config:** _string array or map object_, available config items: `include` | `exclude` | `alias`, examples:  
-a) `['name1', 'name2', ...]` _(p.s. will be treated as `{ include: [name1, name2, ...] }`)_  
-b) `{ exclude: ['comp5', 'comp7'], alias: ['comp1:alias1'] }`
-
-_Notes: `name` format: `name[:alias]`, and name can be component name or submodule like 'base62/lib/base62'._
-
-#### _Additional Rules:_
-- if options undefined, `{ require: [all bower dependency names] }` will be used
-- if options..include undefined, `[all bower dependency names]` will be used
-- if both include/exclude and alias declared an alias for a component, declaration in alias will be used
 
 # run test
 _You need ensure related node modules (for `browserify-bower`) and bower components (for test codes) installed, then run `npm test`._
@@ -127,6 +115,10 @@ _(p.s. in fact, browserify-bower's test codes were copied and modified from `deb
 
 
 # history
+v0.6.0 (9-Aug-2015):  
+1) add mainfiles option, which allows specification of the main file for packages without a bower.json  
+2) enhancement: alias configs under options or 'require'/'external', can be also `{ name: alias, ... }`, except `['name:alias', ...]`  
+
 v0.5.0 (24-July-2015):  
 1) allow alias to be configured from an sibling node of 'require'/'external', too  
 2) enhancement: if an item existed in both 'require' and 'external' lists, let's remove it from 'require' list  
