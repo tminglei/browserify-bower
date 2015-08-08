@@ -16,20 +16,31 @@ module.exports.workdir = function(workdir) {
 //////////////////////////////////////////////////////////////////////////////
 /**
  * alias can be configured at: options.alias > currConfig.alias > currConfig.include (later can override former)
+ * NOTE: options.alias and currConfig.alias can be: { name1: alias1, ... } or ['name1:alias1', ...]
  **/
 function getAliasConfigs(options, currConfig) {
-	var aliasConfigs = {};
-
-	_.forEach((options.alias || []).concat(currConfig.alias || []).concat(currConfig.include || []),
-		function(rawname) {
+	var aliasConfigs = {}, 
+		optAlias = {}, confAlias = {}, incAlias = {};
+	
+	if (_.isArray(options.alias)) {
+		_.forEach(options.alias || [], function(rawname) {
+			optAlias[rawname.split(':')[0]] = rawname.split(':')[1];
+		});
+	} else optAlias = options.alias;
+	
+	if (_.isArray(currConfig.alias)) {
+		_.forEach(currConfig.alias || [], function(rawname) {
+			confAlias[rawname.split(':')[0]] = rawname.split(':')[1];
+		});
+	} else confAlias = currConfig.alias;
+	
+	_.forEach(currConfig.include || [], function(rawname) {
 			if (rawname.indexOf(':') > 0) {
-				var name = rawname.split(':')[0],
-						alias= rawname.split(':')[1];
-				aliasConfigs[name] = alias;
+				incAlias[rawname.split(':')[0]] = rawname.split(':')[1];
 			}
 		});
-
-	return aliasConfigs;
+		
+	return _.extend(aliasConfigs, optAlias, confAlias, incAlias);
 }
 
 function getWorkingLists(options) {
