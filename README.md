@@ -22,7 +22,7 @@ npm install browserify-bower
 In your task runner like `gulp`, add this plugin to `browserify`:
 ```javascript
 b.plugin('browserify-bower', {
-	require: ['*', 'base62/lib/base62'],
+	require: ['*', 'base62/lib/base62', 'base62/xxx:xxx'],
 	external: {
 		exclude: ['comp1', 'comp2']
 	},
@@ -52,6 +52,20 @@ var comp2 = require('alias2');
   });
 </script>
 ```
+
+###Options
+**require:** `{ include: [...], exclude: [...] }` or `[...]`, configure which ones you want `browserify-bower` to help **_require_** in `browserify` for you.   
+> If only `include` part is required, you can simplify it to `require: [...]`.  
+> _If if no reqiure configs are specified, all components under bower components dir will be included by default._  
+
+**external:** `{ include: [...], exclude: [...] }` or `[...]`, configure which ones you want `browserify-bower` to help **_external_** in `browserify` for you.   
+> If only `include` part is required, you can simplify it to `external: [...]`.  
+
+**alias:** `{ name: alias, ...}` or `['name:alias', ...]`, define aliases, then you can use alias instead of name/path in your codes.  
+> In fact, you can define aliases in `root.alias` (global) or `root.[require|external].include` (append to name, like this `name:alias`), and later will override former if conflict.  
+
+**mainfiles:** `{ name: mainfile, ...}`, specify which file you want to use as the main (entry) file for a package  
+> It's specially useful when a package hasn't a `bower.json`.  
 
 ## Command Line
 Use conf file,
