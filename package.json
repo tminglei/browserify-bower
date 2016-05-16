@@ -1,6 +1,6 @@
 {
   "name": "browserify-bower",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "a browserify plugin, to enable you require bower components just like node modules",
   "main": "index.js",
   "repository": {
@@ -19,12 +19,12 @@
   "author": "Minglei Tu <tmlneu@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "lodash": "~3.10.1"
+    "lodash": "~4.12.0"
   },
   "devDependencies": {
-    "browserify": "~10.2.1",
-    "chai": "~2.3.0",
-    "mocha": "~2.2.5"
+    "browserify": "~13.0.1",
+    "chai": "~3.5.0",
+    "mocha": "~2.4.5"
   },
   "directories": {
     "test": "test"

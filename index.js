@@ -48,7 +48,7 @@ function getWorkingLists(options) {
 	var mainfiles = options.mainfiles || {};
 
 	_.forEach(options, function(config, action) {
-		if (_(['require', 'external']).contains(action)) {
+		if (_(['require', 'external']).includes(action)) {
 			if (_(config).isArray()) config = { "include": config };
 
 			var aliasConfigs = getAliasConfigs(options, config);
@@ -57,7 +57,7 @@ function getWorkingLists(options) {
 				name = name.name || name;
 				return !_(config.exclude).map(function(name1) {
 					return name1.split(':')[0];
-				}).contains(name.split(':')[0]);
+				}).includes(name.split(':')[0]);
 			};
 
 			var workinglist = _(config.include || utils.componentNames(_workdir))
