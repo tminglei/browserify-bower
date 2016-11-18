@@ -67,7 +67,7 @@ var comp2 = require('alias2');
 **mainfiles:** `{ name: mainfile, ...}`, specify which file you want to use as the main (entry) file for a package  
 > It's specially useful when a package hasn't a `bower.json`.  
 
-_p.s. with `browerify-bower`, you can also only **require** a sub module instead of a full module, by say 'base62/lib/base62'._
+_p.s. with `browserify-bower`, you can also only **require** a sub module instead of a full module, by say 'base62/lib/base62'._
 
 
 ## Command Line
